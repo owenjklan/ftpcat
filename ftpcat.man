@@ -1,0 +1,96 @@
+.TH ftpcat 1 "30th August, 2003"
+.SH \fBNAME\fP
+ftpcat \- Stream files to or from an FTP server
+\
+.SH \fBSYNOPSIS\fP
+\fBftpcat\fP server rname uname [options ...]
+\
+.SH \fBDESCRIPTION\fP
+\fBFtpcat\fP is a simple filter application designed to either stream
+the input on \fBstdin\fP to a file on a remote FTP server or stream a
+file on a remote FTP server to \fBstdout\fP. An option is also provided
+to save the received content to a disk file when streaming from an FTP
+server to \fBstdout\fP. The default operation for \fBftpcat\fP is to
+stream what is read from \fBstdin\fP to the remote FTP server. This can
+be reversed using the \fB-r\fP command line option.
+
+\fBFtpcat\fP requires at least three parameters to perform it's function.
+These parameters are:
+.TP
+\fBserver\fP
+The hostname or IP address of the remote FTP server.
+.TP
+\fBrname\fP
+The path to save to or read from on the remote FTP server, relevant to
+the given user's home directory.
+.TP
+\fBuname\fP
+The name of the user to log into the remote FTP server as. By default
+\fBftpcat\fP will prompt the user for their password when it is required
+by the login sequence. Although it's use is not recommended, the \fB-P\fP
+option can be used to specify the user's password on the command line.
+\
+.SS \fBOPTIONS\fP
+.TP
+\fB-a address\fP
+Uses the given address as the source address for this connection so that the
+server knows where to connect to for data transfers. By default \fBftpcat\fP
+will use the hostname as obtained by the \fBuname(2)\fP system call.
+\
+.TP
+\fB-k file\fP
+When streaming received data to \fBstdout\fP (see \fB-r\fP option), this
+option tells \fBftpcat\fP to save a copy of the received data to the given
+disk file.
+\
+.TP
+\fB-i\fP
+Displays what is sent to the server and the server's subsequent replies
+on \fBstderr\fP.
+\
+.TP
+\fB-p port\fP
+Uses the given port number as the port to use in the connection to the
+server.
+\
+.TP
+\fB-P password\fP
+Uses the given password for logging into the server. Note that use of this
+option is not recommended for reasons that should be obvious.
+\
+.TP
+\fB-r\fP
+Specifies receive mode. \fBFtpcat\fP will download a file from the remote
+FTP server and output the received data on \fBstdout\fP. The \fB-k\fP option
+can be used to save a copy of the received data to a disk file.
+\
+.TP
+\fB-s\fP
+Specifies send mode. \fBFtpcat\fP will read from \fBstdin\fP and send the
+read data to the remote FTP server. Send mode is the default operating mode
+for \fBftpcat\fP.
+\
+.SH
+\fBEXAMPLES\fP
+Given here are some example command lines for using \fBftpcat\fP.
+.IP
+tar -c stuff/ | ftpcat ftp.foo.com stuff.tar bar
+.PP
+This series of commands will create a \fBtar(1)\fP archive of the
+\fBstuff\fP directory and stream it to \fBftp.foo.com\fP, logging
+in as \fBbar\fP and saving to \fBstuff.tar\fP. This is a very convenient
+method of publishing files to webpages that use FTP upload.
+.IP
+ftpcat ftp.foo.com c/sc.c bar -r -k sc.c | file -
+.PP
+This series of commands will use \fBftpcat\fP to retrieve the \fBsc.c\fP
+file from the \fBc\fP subdirectory on \fBftp.foo.com\fP. \fBFtpcat\fP will
+login as \fBbar\fP and pipe it's output into the standard \fBfile(1)\fP
+utility while saving a copy to \fBsc.c\fP. This is a convenient way of
+retrieving a file from an FTP server and determining it's type with one
+line of commands.
+\
+.SH
+\fBAUTHOR\fP
+Owen Klan. E-mail me with comments, questions or even suggestions at
+\fBalkerr@yifan.net\fP
